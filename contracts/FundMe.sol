@@ -7,9 +7,9 @@ pragma solidity ^0.8.8;
 
 import './PriceConverter.sol';
 
-error NotOwner();
-error NotEnoughBalance();
-error CallFailed();
+    error NotOwner();
+    error NotEnoughBalance();
+    error CallFailed();
 
 contract FundMe {
 
@@ -64,5 +64,15 @@ contract FundMe {
         (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
         if(!callSuccess)
             revert CallFailed();
+    }
+
+    // This will get called if calldata is empty
+    receive() external payable {
+        fund();
+    }
+
+    // This will get called if calldata is there but no method is available to handle the request
+    fallback() external payable {
+        fund();
     }
 }
