@@ -28,7 +28,7 @@ contract FundMe {
 
     modifier onlyOwner {
         // do this first
-        if(msg.sender != i_owner)
+        if (msg.sender != i_owner)
             revert NotOwner();
 
         // do rest of the code!!
@@ -36,15 +36,15 @@ contract FundMe {
     }
 
     function fund() public payable {
-        if(msg.value.getConversionRate() < MINIMUM_USD) // 1e18 == 1 * 10 ** 18
+        if (msg.value.getConversionRate() < MINIMUM_USD) // 1e18 == 1 * 10 ** 18
             revert NotEnoughBalance();
 
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] = msg.value;
     }
 
-    function withdraw() public onlyOwner  {
-        for(uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++){
+    function withdraw() public onlyOwner {
+        for (uint256 funderIndex = 0; funderIndex < funders.length; funderIndex++) {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }
@@ -61,8 +61,8 @@ contract FundMe {
         // require(sendSuccess, "Send failed");
 
         // call
-        (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
-        if(!callSuccess)
+        (bool callSuccess,) = payable(msg.sender).call{value : address(this).balance}("");
+        if (!callSuccess)
             revert CallFailed();
     }
 
